@@ -2,7 +2,7 @@
 
 長輩／樂齡中心用的猜謎：老東西、老照片、老歌。來源：樂齡軟體主題規劃表編號 10（認知與學習，優先推薦）。解決「缺乏腦力活動與聊天話題」，所以每題都有「聊一聊」。2026-11-05 建立。
 
-- 純靜態：`index.html`（CSS）＋`data.js`（題庫 50 題）＋`sources.js`（逐題資料來源）＋`photos.js`（照片授權，產生檔）＋`app.js`＋`manual.html`＋PWA。Pages 用 `pages.yml`（push master 部署）；visitor-badge `m255525.nostalgiamemorygame`。
+- 純靜態：`index.html`（CSS）＋`data.js`（題庫 50 題）＋`sources.js`（逐題資料來源）＋`photos.js`（照片授權，產生檔）＋`app.js`＋`manual.html`＋PWA。Pages 用 `pages.yml`（push master 部署）：<https://m255525.github.io/nostalgia-memory-game/>；visitor-badge `m255525.nostalgiamemorygame`。
 - 本機預覽 port **8865**。
 
 ## 設計原則
