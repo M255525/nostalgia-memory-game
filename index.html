@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>懷舊回憶遊戲</title>
+<meta name="description" content="在柑仔店戳一個洞，猜老東西、老照片、老歌。不計時，答錯也有糖吃，每題都有聊天話題，樂齡中心也能投影一起玩。">
+<meta name="theme-color" content="#5A3418">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="懷舊回憶">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Iansui&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wood:#5A3418; --wood-2:#472810; --wood-3:#6E4322;
+  --paper:#FFF4D9; --paper-2:#FBE6B8;
+  --ink:#2A1709; --sub:#5C4631; --line:#C9A672;
+  --red:#B5121B; --red-2:#7E0A11; --gold:#FFC928; --teal:#00796B; --pink:#C2185B; --blue:#0D5AA7;
+  --mq:0px; color-scheme:light;
+}
+html{font-size:20px;-webkit-text-size-adjust:100%}
+html[data-fs="xl"]{font-size:24px}
+html[data-hc="1"]{--paper:#fff;--paper-2:#fff;--ink:#000;--sub:#111;--line:#000}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;font-weight:500;line-height:1.55;padding-top:var(--mq);
+  background-color:var(--wood);background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 2px,transparent 2px 92px),repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 7px,transparent 7px 19px)}
+body.has-marquee{--mq:34px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--blue);font-weight:700}
+:focus-visible{outline:3px solid #0B57D0;outline-offset:2px}
+h1,h2,h3{font-family:'Iansui','Noto Sans TC',sans-serif;font-weight:400;line-height:1.3;margin:0}
+img{max-width:100%}
+
+#marqueeBar{position:fixed;top:0;left:0;right:0;height:34px;background:var(--wood-2);z-index:60;overflow:hidden;display:none;align-items:center;border-bottom:3px solid var(--gold)}
+#marqueeBar.show{display:flex}
+#marqueeTrack{display:inline-block;white-space:nowrap;padding-left:100%;font-size:16px;font-weight:700;color:#fff;animation:marquee-scroll 30s linear infinite}
+#marqueeBar:hover #marqueeTrack{animation-play-state:paused}
+@keyframes marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+#app{width:100%;max-width:32rem;min-height:calc(100dvh - var(--mq));margin:0 auto;padding:.6rem .7rem calc(1rem + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:.6rem}
+
+/* 招牌 */
+.sign{position:relative;background:var(--red);color:var(--gold);border-radius:.5rem;padding:.5rem 3rem;text-align:center;box-shadow:0 0 0 3px var(--gold) inset,0 0 0 5px var(--red) inset,0 .3rem 0 var(--wood-2)}
+.sign h1{font-size:1.75rem;letter-spacing:.14em}
+.sign p{margin:0;color:#fff;font-size:.82rem;font-weight:700}
+.sign .gear{position:absolute;right:.35rem;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:1.35rem;min-width:2.6rem;min-height:2.6rem}
+.bar{display:flex;align-items:center;gap:.5rem;color:#fff}
+.bar h1{flex:1 1 0;min-width:0;font-size:1.2rem;text-align:right}
+.slip,.talk,.praise,.board,.doc{min-width:0;max-width:100%}
+.back{display:inline-flex;align-items:center;min-height:2.8rem;padding:.2rem .8rem;border-radius:.6rem;background:var(--paper);color:var(--ink);font-weight:900;text-decoration:none;box-shadow:0 .18rem 0 var(--wood-2);border:0}
+
+/* 戳戳樂紙 */
+.board{background:var(--paper);border-radius:.3rem;padding:.6rem .55rem .7rem;box-shadow:0 .35rem 0 var(--wood-2);border:3px dashed var(--red)}
+.board .bh{text-align:center;color:var(--red);font-family:'Iansui','Noto Sans TC',sans-serif;font-size:1.12rem;letter-spacing:.02em;margin-bottom:.4rem}
+.holes{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.hole{aspect-ratio:1;border:0;border-radius:50%;padding:0;color:#fff;font-family:'Iansui','Noto Sans TC',sans-serif;font-size:1.9rem;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -.28rem 0 rgba(0,0,0,.28),inset 0 .2rem 0 rgba(255,255,255,.35),0 .12rem 0 var(--line);transition:transform .12s}
+.hole:active{transform:scale(.93)}
+.hole.k0{background:var(--red)}.hole.k1{background:var(--teal)}.hole.k2{background:var(--pink)}.hole.k3{background:var(--blue)}
+.hole.done{background:var(--wood-2);box-shadow:inset 0 .4rem .5rem rgba(0,0,0,.65);font-size:1.5rem}
+.hole.pop{animation:pop .24s ease-in forwards}
+@keyframes pop{40%{transform:scale(1.1) rotate(-5deg)}100%{transform:scale(.25) rotate(12deg);opacity:.15}}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:.4rem;width:100%;min-height:3.3rem;padding:.4rem .8rem;border:0;border-radius:.7rem;background:var(--red);color:#fff;font-weight:900;font-size:1.1rem;text-decoration:none;box-shadow:0 .22rem 0 var(--red-2);text-align:center;line-height:1.25}
+.btn:active{transform:translateY(.15rem);box-shadow:0 .07rem 0 var(--red-2)}
+.btn.alt{background:var(--paper);color:var(--ink);box-shadow:0 0 0 2px var(--wood) inset,0 .22rem 0 var(--wood-2)}
+.btn.teal{background:var(--teal);box-shadow:0 .22rem 0 #004D43}
+.btn[disabled]{opacity:.6}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.stack{display:flex;flex-direction:column;gap:.5rem}
+.foot{display:flex;flex-wrap:wrap;justify-content:center;gap:.1rem 1rem;font-size:.88rem;margin-top:auto;padding-top:.3rem}
+.foot a,.foot button{background:none;border:0;color:#FFE9B5;font-weight:700;text-decoration:underline;min-height:2.4rem;display:inline-flex;align-items:center;padding:0 .1rem}
+
+/* 紙條（題目、答案） */
+.slip{background:var(--paper);border-radius:.6rem;padding:.7rem .8rem;box-shadow:0 .3rem 0 var(--wood-2)}
+.tag{display:inline-block;background:var(--red);color:#fff;border-radius:.3rem;padding:0 .5rem;font-size:.85rem;font-weight:700}
+.tag.c-p{background:var(--teal)}.tag.c-s{background:var(--blue)}
+.pic{margin:.45rem 0 0}
+.pic img{display:block;width:100%;height:auto;max-height:50dvh;object-fit:contain;background:var(--ink);border:.4rem solid #fff;box-shadow:0 0 0 1px var(--line)}
+.cr{display:block;margin-top:.2rem;font-size:.72rem;line-height:1.4;color:var(--sub);word-break:break-word}
+.cr a{font-weight:500}
+.q{font-size:1.25rem;font-weight:900;line-height:1.45;margin:.55rem 0 .1rem}
+.opts{display:flex;flex-direction:column;gap:.55rem}
+.opt{min-height:3.8rem;width:100%;border:0;border-radius:.7rem;background:var(--gold);color:var(--ink);font-weight:900;font-size:1.25rem;box-shadow:0 .24rem 0 #B98A00;padding:.3rem .7rem;line-height:1.3}
+.opt:active{transform:translateY(.15rem);box-shadow:0 .08rem 0 #B98A00}
+.opt.no{background:#D8CDB6;color:#5a5044;box-shadow:none;text-decoration:line-through}
+.msg{color:#FFE9B5;font-weight:900;text-align:center;min-height:1.6rem}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.hintbox{background:#FFF;border-left:.35rem solid var(--gold);padding:.35rem .6rem;border-radius:.3rem;font-weight:700}
+
+/* 唱片 */
+.disc{width:min(13rem,62vw);aspect-ratio:1;margin:.5rem auto 0;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,#1b1b1b 0 3px,#2d2d2d 3px 5px);display:flex;align-items:center;justify-content:center;animation:spin 7s linear infinite}
+.disc b{width:42%;aspect-ratio:1;border-radius:50%;background:var(--red);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.8rem;text-align:center;line-height:1.2;padding:.2rem}
+.discwrap{text-align:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.praise{background:var(--gold);border-radius:.6rem;text-align:center;padding:.45rem .6rem;font-weight:900;font-size:1.1rem;box-shadow:0 .22rem 0 #B98A00}
+.ans{font-size:1.75rem;color:var(--red);text-align:center;margin:.4rem 0 .15rem}
+.story{font-size:1.05rem;margin:.3rem 0 0}
+.talk{background:var(--teal);color:#fff;border-radius:.6rem;padding:.55rem .75rem;box-shadow:0 .22rem 0 #004D43}
+.talk h3{font-size:1.05rem;color:#FFE9B5}
+.talk p{margin:.1rem 0 0;font-size:1.12rem;font-weight:700}
+.src{font-size:.78rem;color:var(--sub);margin:.45rem 0 0;line-height:1.45}
+
+/* 糖果罐 */
+.jar{position:relative;width:11rem;height:12rem;margin:.3rem auto 0;border:.3rem solid rgba(255,255,255,.75);border-top-width:1.1rem;border-radius:1rem 1rem 1.4rem 1.4rem;background:rgba(255,255,255,.16);display:flex;flex-wrap:wrap-reverse;align-content:flex-start;gap:.12rem;padding:.3rem;overflow:hidden}
+.jar i{width:1.15rem;height:1.15rem;border-radius:50%;box-shadow:inset -.12rem -.12rem 0 rgba(0,0,0,.2)}
+.jarn{color:#fff;text-align:center;font-size:1.2rem;font-weight:900}
+.jl{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}
+.ji{display:block;background:var(--paper);border-radius:.5rem;overflow:hidden;color:var(--ink);text-decoration:none;font-weight:900;font-size:.95rem;text-align:center;box-shadow:0 .18rem 0 var(--wood-2)}
+.ji img,.ji .nd{display:block;width:100%;height:5.5rem;object-fit:cover;background:#222;color:var(--gold);line-height:5.5rem;font-size:2rem}
+.ji span{display:block;padding:.2rem .25rem}
+
+/* 設定選項 */
+.fld{font-weight:900;margin:.5rem 0 .25rem}
+.choice{display:flex;flex-wrap:wrap;gap:.4rem}
+.choice button{flex:1 1 auto;min-height:3rem;border:0;border-radius:.6rem;background:#fff;box-shadow:0 0 0 2px var(--line);font-weight:900;padding:.2rem .6rem}
+.choice button.on{background:var(--red);color:#fff;box-shadow:none}
+
+/* 投影舞台 */
+body.stage #app{max-width:none;height:calc(100dvh - var(--mq));min-height:0;padding:1.2vh 2vw}
+body.stage{font-size:clamp(17px,1.75vw,34px)}
+.st-top{display:flex;align-items:center;gap:.8rem;color:#fff}
+.st-top .n{flex:1 1 0;text-align:center;font-family:'Iansui','Noto Sans TC',sans-serif;font-size:1.6em}
+.st{flex:1 1 0;display:grid;overflow:hidden;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:2vw;align-items:stretch;min-height:0}
+.st .l,.st .r{background:var(--paper);border-radius:.6rem;padding:1.2vw 1.4vw;display:flex;flex-direction:column;min-width:0;min-height:0;overflow-y:auto}
+.st .l{justify-content:center}
+.st .l img{width:100%;height:auto;max-height:66dvh;border:0;object-fit:contain;display:block;background:var(--ink)}
+.st .disc{width:min(22vw,46dvh)}
+.st .q{font-size:1.5em}
+.st ol{margin:.5em 0 0;padding-left:1.4em;font-size:1.3em;font-weight:900}
+.st .ans{font-size:2.2em;text-align:left}
+.st .story{font-size:1.05em}
+.st .talk{margin-top:.6em;font-size:1em}
+.st .talk p{font-size:1.1em}
+.st-foot{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.st-foot .btn{flex:1 1 9rem;width:auto;font-size:1.05em}
+.teams{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6em}
+.teams button{flex:1 1 0;min-height:3rem;border:0;border-radius:.6rem;background:#fff;box-shadow:0 0 0 2px var(--line);font-weight:900;white-space:nowrap}
+.teams button.on{background:var(--teal);color:#fff;box-shadow:none}
+.score{font-size:1.5em;text-align:center}
+@media (max-width:760px),(orientation:portrait){.st{grid-template-columns:1fr;overflow-y:auto}.st .l,.st .r{overflow:visible}body.stage #app{height:auto;min-height:calc(100dvh - var(--mq))}.st{flex:1 1 auto}}
+
+/* 題本、來源 */
+.doc{background:var(--paper);border-radius:.6rem;padding:.7rem .8rem}
+.doc h2{font-size:1.3rem;margin:.6rem 0 .2rem}
+.doc ol,.doc ul{padding-left:1.3em;margin:.3rem 0}
+.doc li{margin:.35rem 0;font-size:.9rem;word-break:break-word}
+.ph{break-inside:avoid;border-bottom:1px solid var(--line);padding:.4rem 0}
+.ph b{color:var(--red)}
+.ph p{margin:.1rem 0}
+
+/* 對話框 */
+#modal{position:fixed;inset:0;background:rgba(30,16,6,.65);z-index:80;display:none;align-items:flex-end;justify-content:center}
+#modal.show{display:flex}
+#modalBox{background:var(--paper);width:100%;max-width:32rem;max-height:92dvh;overflow:auto;border-radius:1.1rem 1.1rem 0 0;padding:.9rem .9rem calc(1rem + env(safe-area-inset-bottom));font-size:20px}
+#modalBox h2{font-size:1.4rem;margin-bottom:.4rem}
+#modalBox ul{padding-left:1.2em}
+#modalBox li{margin:.35rem 0}
+.sticky{position:sticky;bottom:-1rem;background:var(--paper);padding:.5rem 0 .2rem}
+.link{background:none;border:0;color:var(--blue);font-weight:700;text-decoration:underline;min-height:2.4rem}
+.small{font-size:.84rem;color:var(--sub)}
+.set-sec{border-radius:.6rem;margin-bottom:.45rem;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.set-sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.5rem;padding:.55rem .7rem;font-weight:700;min-height:3rem}
+.set-sec>summary::-webkit-details-marker{display:none}
+.set-sec>summary::after{content:'▸';flex:none;transition:transform .2s}
+.set-sec[open]>summary::after{transform:rotate(90deg)}
+.set-sec .sst{flex:1 1 0;min-width:0}
+.set-sec .ssv{font-weight:500;font-size:.78rem;color:var(--sub);text-align:right}
+.set-body{padding:0 .7rem .7rem}
+.toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.5rem 1rem;border-radius:.7rem;z-index:90;font-weight:700;max-width:calc(100vw - 2rem)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}#marqueeTrack{animation:marquee-scroll 90s linear infinite!important}}
+@media print{
+  body{background:#fff;padding:0;font-size:12pt}#marqueeBar,.noprint,#modal{display:none!important}
+  #app{max-width:none;padding:0}.doc{padding:0;background:#fff}
+}
+</style>
+</head>
+<body>
+<div id="marqueeBar"><div id="marqueeTrack"></div></div>
+<main id="app"></main>
+<div id="modal" role="dialog" aria-modal="true"><div id="modalBox"></div></div>
+<noscript>這個遊戲需要開啟 JavaScript 才能玩。</noscript>
+<script src="data.js"></script>
+<script src="sources.js"></script>
+<script src="photos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
