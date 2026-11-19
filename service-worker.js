@@ -1,6 +1,6 @@
 // 加入主畫面用。network-first＋同源快取備援；照片也先存好，樂齡中心網路不穩時才玩得下去。
 importScripts('photos.js');
-const CACHE_NAME = 'nostalgia-memory-game-shell-v1';
+const CACHE_NAME = 'nostalgia-memory-game-shell-v2';
 const SHELL_FILES = ['./', './index.html', './app.js', './data.js', './sources.js', './photos.js', './manual.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -14,7 +14,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME && k.indexOf(CACHE_NAME.replace(/\d+$/, '')) === 0).map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
